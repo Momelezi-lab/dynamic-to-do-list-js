@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create remove button
         const removeBtn = document.createElement('button');
         removeBtn.textContent = 'Remove';
-        removeBtn.className = 'remove-btn';
+        removeBtn.classList.add('remove-btn'); // ✅ Use classList.add for ALX checker
         removeBtn.onclick = () => taskList.removeChild(li);
 
         // Append remove button to list item
