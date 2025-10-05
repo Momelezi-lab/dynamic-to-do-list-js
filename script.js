@@ -4,12 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('task-input');
     const taskList = document.getElementById('task-list');
 
-    // Function to add a new task
-    function addTask() {
-        const taskText = taskInput.value.trim();
+    // Load tasks from Local Storage on page load
+    function loadTasks() {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        storedTasks.forEach(taskText => addTask(taskText, false)); // 'false' prevents saving again
+    }
+
+    // Add a new task
+    function addTask(taskTextParam = null, save = true) {
+        const taskText = taskTextParam || taskInput.value.trim();
 
         if (taskText === '') {
-            alert('Please enter a task!');
+            if (!taskTextParam) alert('Please enter a task!');
             return;
         }
 
@@ -20,27 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create remove button
         const removeBtn = document.createElement('button');
         removeBtn.textContent = 'Remove';
-        removeBtn.classList.add('remove-btn'); // ✅ Use classList.add for ALX checker
-        removeBtn.onclick = () => taskList.removeChild(li);
+        removeBtn.classList.add('remove-btn');
+        removeBtn.onclick = () => {
+            taskList.removeChild(li);
+            // Remove from Local Storage
+            const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const updatedTasks = storedTasks.filter(task => task !== taskText);
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+        };
 
-        // Append remove button to list item
-        li.appendChild(removeBtn);
-
-        // Append list item to task list
-        taskList.appendChild(li);
-
-        // Clear input
-        taskInput.value = '';
-    }
-
-    // Event listener for Add Task button
-    addButton.addEventListener('click', addTask);
-
-    // Event listener for Enter key press in input field
-    taskInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            addTask();
-        }
-    });
-});
+        // Append remove button and list item
+        li.app
 
